@@ -41,9 +41,9 @@
           const form = document.getElementById('blackhole-form');
           const input = document.getElementById('blackhole-search');
 
-          // 1. Boot up the Service Worker
+       
           if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register('/active/uv/uv.sw.js', {
+              navigator.serviceWorker.register('/uv/uv.sw.js', {
                   scope: __uv$config.prefix
               }).then(() => {
                   console.log("Blackhole Engine Online.");
