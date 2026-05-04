@@ -35,38 +35,41 @@
       </form>
     </div>
 
-    <script>
-      const form = document.getElementById('blackhole-form');
-      const input = document.getElementById('blackhole-search');
+<script>
+      // Wait for the UV engine files to finish loading first
+      window.addEventListener('load', () => {
+          const form = document.getElementById('blackhole-form');
+          const input = document.getElementById('blackhole-search');
 
-      // 1. Boot up the Service Worker
-      if ('serviceWorker' in navigator) {
-          // Note: using the /active/ path based on your config
-          navigator.serviceWorker.register('/active/uv/uv.sw.js', {
-              scope: __uv$config.prefix
-          }).then(() => {
-              console.log("Blackhole Engine Online.");
-          }).catch(err => {
-              console.error("Engine failed to boot:", err);
-          });
-      }
-
-      // 2. Listen for the Enter key on your search bar
-      form.addEventListener('submit', async (event) => {
-          event.preventDefault();
-          
-          let url = input.value.trim();
-          if (!url) return;
-          
-          // Format the URL properly (Google search vs direct link)
-          if (!url.includes('.') || url.includes(' ')) {
-              url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
-          } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
-              url = 'https://' + url;
+          // 1. Boot up the Service Worker
+          if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.register('/active/uv/uv.sw.js', {
+                  scope: __uv$config.prefix
+              }).then(() => {
+                  console.log("Blackhole Engine Online.");
+              }).catch(err => {
+                  console.error("Engine failed to boot:", err);
+              });
           }
 
-          // Route the traffic through the Ultraviolet prefix!
-          window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
+          // 2. Listen for the Enter key on your search bar
+          form.addEventListener('submit', async (event) => {
+              // This line is what stops the page from reloading!
+              event.preventDefault();
+              
+              let url = input.value.trim();
+              if (!url) return;
+              
+              // Format the URL properly (Google search vs direct link)
+              if (!url.includes('.') || url.includes(' ')) {
+                  url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+              } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                  url = 'https://' + url;
+              }
+
+              // Route the traffic through the Ultraviolet prefix
+              window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
+          });
       });
     </script>
   </body>
