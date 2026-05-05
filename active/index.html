@@ -42,14 +42,19 @@
           const input = document.getElementById('blackhole-search');
 
        
+
           if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register('/uv/uv.sw.js', {
-                  scope: __uv$config.prefix
-              }).then(() => {
-                  console.log("Blackhole Engine Online.");
-              }).catch(err => {
+              try {
+                  await navigator.serviceWorker.register('/sw.js', {
+                      scope: __uv$config.prefix
+                  });
+                  console.log("Service Worker installed.");
+                  
+                  await navigator.serviceWorker.ready;
+                  console.log("Blackhole Engine Online and Ready!");
+              } catch (err) {
                   console.error("Engine failed to boot:", err);
-              });
+              }
           }
 
           // 2. Listen for the Enter key on your search bar
