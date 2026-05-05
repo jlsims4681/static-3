@@ -59,7 +59,7 @@
           try {
               const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
               
-              await connection.setTransport("/prxy/baremux/bare.cjs", [__uv$config.bare]);
+              await connection.setTransport("/prxy/baremux/bare.mjs", [__uv$config.bare]);
               console.log("BareMux pipeline connected.");
           } catch (err) {
               console.error("Failed to connect BareMux pipeline:", err);
