@@ -40,9 +40,8 @@
           const form = document.getElementById('blackhole-form');
           const input = document.getElementById('blackhole-search');
 
-          // 1. IMMEDIATELY lock the form so it NEVER reloads the page
           form.addEventListener('submit', (event) => {
-              event.preventDefault(); // This is the magic line that stops the refresh!
+              event.preventDefault(); 
               
               let url = input.value.trim();
               if (!url) return;
@@ -53,19 +52,16 @@
                   url = 'https://' + url;
               }
 
-              // Send the traffic through the proxy
               window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
           });
 
-          // 2. Boot up the Service Worker in the background
           if ('serviceWorker' in navigator) {
               try {
-                  // NOTE: Make sure this path is correct! 
-                  // If you left sw.js in the uv folder, change this to '/uv/sw.js'
+                  // WE CHANGED THE SCOPE TO '/' RIGHT HERE:
                   await navigator.serviceWorker.register('/sw.js', {
-                      scope: __uv$config.prefix
+                      scope: '/' 
                   });
-                  console.log("Service Worker installed.");
+                  console.log("Service Worker installed globally.");
                   
                   await navigator.serviceWorker.ready;
                   console.log("Blackhole Engine Online and Ready!");
