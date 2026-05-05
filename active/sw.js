@@ -13,5 +13,14 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(sw.fetch(event));
+    event.respondWith(
+        (async () => {
+            // ONLY intercept links that have the proxy prefix
+            if (event.request.url.startsWith(location.origin + __uv$config.prefix)) {
+                return await sw.fetch(event);
+            }
+            // Let all normal website files load normally
+            return fetch(event.request);
+        })()
+    );
 });
