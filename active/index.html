@@ -36,30 +36,13 @@
     </div>
 
 <script>
-      // Notice the "async" right here! This fixes your crash.
       window.addEventListener('load', async () => {
           const form = document.getElementById('blackhole-form');
           const input = document.getElementById('blackhole-search');
 
-          // 1. Boot up the Service Worker and WAIT for it
-          if ('serviceWorker' in navigator) {
-              try {
-                  await navigator.serviceWorker.register('/sw.js', {
-                      scope: __uv$config.prefix
-                  });
-                  console.log("Service Worker installed.");
-                  
-                  // This halts everything until the engine is actively controlling the page
-                  await navigator.serviceWorker.ready;
-                  console.log("Blackhole Engine Online and Ready!");
-              } catch (err) {
-                  console.error("Engine failed to boot:", err);
-              }
-          }
-
-          // 2. Listen for the Enter key
+          // 1. IMMEDIATELY lock the form so it NEVER reloads the page
           form.addEventListener('submit', (event) => {
-              event.preventDefault();
+              event.preventDefault(); // This is the magic line that stops the refresh!
               
               let url = input.value.trim();
               if (!url) return;
@@ -70,9 +53,26 @@
                   url = 'https://' + url;
               }
 
-              // Send it!
+              // Send the traffic through the proxy
               window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
           });
+
+          // 2. Boot up the Service Worker in the background
+          if ('serviceWorker' in navigator) {
+              try {
+                  // NOTE: Make sure this path is correct! 
+                  // If you left sw.js in the uv folder, change this to '/uv/sw.js'
+                  await navigator.serviceWorker.register('/sw.js', {
+                      scope: __uv$config.prefix
+                  });
+                  console.log("Service Worker installed.");
+                  
+                  await navigator.serviceWorker.ready;
+                  console.log("Blackhole Engine Online and Ready!");
+              } catch (err) {
+                  console.error("Engine failed to boot:", err);
+              }
+          }
       });
     </script>
   </body>
