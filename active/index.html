@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blackhole</title>
 
-    <script src="/active/prxy/baremux/index.js"></script>
+    <script src="/prxy/baremux/index.js"></script>
     <script src="uv/uv.bundle.js" defer></script>
     <script src="uv/uv.config.js" defer></script>
 
@@ -57,9 +57,9 @@
           });
 
           try {
-              const connection = new BareMux.BareMuxConnection("/active/prxy/baremux/worker.js");
+              const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
               
-              await connection.setTransport("/active/prxy/baremux/bare.cjs", [__uv$config.bare]);
+              await connection.setTransport("/prxy/baremux/bare.cjs", [__uv$config.bare]);
               console.log("BareMux pipeline connected.");
           } catch (err) {
               console.error("Failed to connect BareMux pipeline:", err);
