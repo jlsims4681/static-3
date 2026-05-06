@@ -36,7 +36,7 @@
       </form>
     </div>
 
-<script>
+    <script>
       window.addEventListener('load', async () => {
           const form = document.getElementById('blackhole-form');
           const input = document.getElementById('blackhole-search');
@@ -56,10 +56,11 @@
               window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
           });
 
-     try {
+          try {
               const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
 
-              await connection.setTransport("/prxy/baremux/bare.cjs", [__uv$config.bare]);
+              // Updated to .js so Vercel serves it correctly!
+              await connection.setTransport("/prxy/baremux/bare.js", [__uv$config.bare]);
               
               console.log("BareMux pipeline connected!");
           } catch (err) {
