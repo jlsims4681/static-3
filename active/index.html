@@ -56,10 +56,10 @@
               window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
           });
 
-         try {
+      try {
               const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
               
-              await connection.setTransport("https://unpkg.com/@mercuryworkshop/bare-mux/dist/bare.cjs", [__uv$config.bare]);
+              await connection.setTransport("https://esm.sh/@mercuryworkshop/bare-mux/dist/bare.cjs", [__uv$config.bare]);
               console.log("BareMux pipeline connected.");
           } catch (err) {
               console.error("Failed to connect BareMux pipeline:", err);
