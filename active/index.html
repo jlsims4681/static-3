@@ -56,11 +56,9 @@
               window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
           });
 
-          try {
-              const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
-
-              // Updated to .js so Vercel serves it correctly!
-              await connection.setTransport("/prxy/baremux/bare.js", [__uv$config.bare]);
+         try {
+              const connection = new BareMux.BareMuxConnection("/active/baremux/worker.js");
+              await connection.setTransport("/active/baremux/bare.js", [__uv$config.bare]);
               
               console.log("BareMux pipeline connected!");
           } catch (err) {
