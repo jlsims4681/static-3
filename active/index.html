@@ -1,36 +1,15 @@
 <!DOCTYPE html>
-<!--
-  
-
-██╗    ██╗   ██╗
-██║    ██║   ██║
-██║    ██║   ██║
-██║    ╚██╗ ██╔╝
-███████╗╚████╔╝ 
-╚══════╝ ╚═══╝  
-                
-                        
-
-By LupineVault.com
-All images and code are owned by LupineVault (lupinevault.com) and associated developers.
-© 2025 LupineVault and all associated developers.
-
-UV Static 2.0
--
-Developed by technonyte0
--->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UV Static v2</title>
+    <title>blackhole v2</title>
     <script src="check.js" defer></script>
     <script defer src="scripts/lstimer.js"></script>
 
     <link rel="stylesheet" href="style/global.css" />
     <link rel="stylesheet" href="style/browser.css" />
     
-
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.nomodule.min.js"
@@ -44,6 +23,8 @@ Developed by technonyte0
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+
+    <script src="https://unpkg.com/@mercuryworkshop/bare-mux/dist/index.js"></script>
 
     <script src="uv/uv.bundle.js" defer></script>
     <script src="uv/uv.config.js" defer></script>
@@ -68,10 +49,8 @@ Developed by technonyte0
       UV Static 2.0 doesn't support smaller screens. Please use UV Static 2.0 on a larger screen.
     </div>
 
-
   <div id="nav"></div>
   <div id="main-content"></div>
-
 
     <div id="tab-view" class=""></div>
     <div class="sidebar-container">
@@ -106,11 +85,10 @@ Developed by technonyte0
   </g>
 </svg>
 
-           
+            
 
               <p class="tooltip">Home</p>
             </button>
-            <!-- <p class="logo-name">RED Browse</p> -->
             <span>
               <button id="page-back">
                 <ion-icon
@@ -168,11 +146,38 @@ Developed by technonyte0
       <div class="option" id="abc-option">Open in about:blank</div>
       <div class="option" id="git-option">GitHub</div>
     </div>
+    
     <script>
       const optionsBtn = document.getElementById("options-btn");
       const overlay = document.getElementById("menu-overlay");
       optionsBtn.addEventListener("click", () => {
         overlay.classList.toggle("active");
+      });
+
+      // 2. BAREMUX PIPELINE & SERVICE WORKER BOOT SEQUENCE ADDED HERE
+      window.addEventListener('load', async () => {
+          try {
+              // Connects to your local worker, but pulls the engine directly from the CDN
+              const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
+              await connection.setTransport("https://unpkg.com/@mercuryworkshop/bare-mux/dist/index.js", [__uv$config.bare]);
+              console.log("BareMux pipeline connected via CDN!");
+          } catch (err) {
+              console.error("Pipeline error:", err);
+          }
+
+          if ('serviceWorker' in navigator) {
+              try {
+                  await navigator.serviceWorker.register('/sw.js', {
+                      scope: '/' 
+                  });
+                  console.log("Service Worker installed globally.");
+                  
+                  await navigator.serviceWorker.ready;
+                  console.log("UV Engine Online and Ready!");
+              } catch (err) {
+                  console.error("Engine failed to boot:", err);
+              }
+          }
       });
     </script>
   </body>
