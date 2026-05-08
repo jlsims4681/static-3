@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blackhole</title>
 
-    <script src="https://unpkg.com/@mercuryworkshop/bare-mux/dist/index.js"></script>
+    <script src="/active/index.js"></script>
     <script src="uv/uv.bundle.js" defer></script>
     <script src="uv/uv.config.js" defer></script>
 
@@ -57,11 +57,9 @@
           });
 
           try {
-              // Pointing to your new active folder setup!
-              const connection = new BareMux.BareMuxConnection("/active/baremux/worker.js");
-              
-              // This is the bridge. 
-              await connection.setTransport("/active/baremux/bare.js", [__uv$config.bare]);
+              // REWRITTEN: Now pointing to your active folder strategy
+              const connection = new BareMux.BareMuxConnection("/active/worker.js");
+              await connection.setTransport("/active/bare.js", [__uv$config.bare]);
               
               console.log("BareMux pipeline connected!");
           } catch (err) {
