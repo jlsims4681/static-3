@@ -60,7 +60,7 @@
           // 2. Boot up the BareMux Pipeline using the CDN
           try {
               const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
-              await connection.setTransport("https://unpkg.com/@mercuryworkshop/bare-mux/dist/index.js", [__uv$config.bare]);
+              await connection.setTransport("https://unpkg.com/@mercuryworkshop/bare-as-module3/dist/index.js", [__uv$config.bare]);
               
               console.log("BareMux pipeline connected via CDN!");
           } catch (err) {
