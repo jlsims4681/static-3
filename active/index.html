@@ -37,14 +37,21 @@
     </div>
 
     <script>
-      const optionsBtn = document.getElementById("options-btn");
-      const overlay = document.getElementById("menu-overlay");
-      optionsBtn.addEventListener("click", () => {
-        overlay.classList.toggle("active");
-      });
-
-      // THE NEW STRICT BOOT SEQUENCE
+      // This wrapper forces JS to wait until the HTML is fully loaded
       window.addEventListener('load', async () => {
+          
+          // --- 1. Menu Button Logic ---
+          const optionsBtn = document.getElementById("options-btn");
+          const overlay = document.getElementById("menu-overlay");
+          
+          // The "if" statement ensures it doesn't crash if it can't find the button
+          if (optionsBtn && overlay) {
+              optionsBtn.addEventListener("click", () => {
+                  overlay.classList.toggle("active");
+              });
+          }
+
+          // --- 2. Search Bar Logic ---
           const form = document.getElementById('url-form');
           const input = document.getElementById('url-input');
 
@@ -62,15 +69,16 @@
               });
           }
 
+          // --- 3. The Proxy Engine Boot Sequence ---
           try {
-              // 1. Connect to the local worker
+              // Connect to the local worker
               const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
               
-              // 2. Use your LOCAL browser-safe bare.js file instead of the blocked CDN
+              // Use your LOCAL browser-safe bare.js file
               await connection.setTransport("/prxy/baremux/bare.js", [__uv$config.bare]);
               console.log("BareMux transport connected locally!");
 
-              // 3. ONLY register the Service Worker if step 1 and 2 succeed
+              // ONLY register the Service Worker if transport succeeds
               if ('serviceWorker' in navigator) {
                   await navigator.serviceWorker.register('/sw.js', { scope: '/' });
                   console.log("Service Worker installed.");
