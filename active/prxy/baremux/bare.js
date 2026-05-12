@@ -539,3 +539,4 @@
 
 }));
 //# sourceMappingURL=index.js.map
+return [globalThis.BareMod.BareClient, "BareClient"];
