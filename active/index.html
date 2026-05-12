@@ -25,10 +25,10 @@
     <div style="text-align: center; margin-top: 20vh;">
       <h1>Blackhole</h1>
       
-      <form id="blackhole-form">
+      <form id="url-form">
         <input 
           type="text" 
-          id="blackhole-search" 
+          id="url-input" 
           placeholder="Search the web or enter URL..." 
           autocomplete="off"
           style="padding: 15px; width: 300px; border-radius: 8px; border: none;"
@@ -72,7 +72,6 @@
           }
 
           // --- 3. The Proxy Engine Boot Sequence (Unmasked) ---
-          // No try/catch wrapper here so the exact error line will bubble up to the console!
           
           // Connect to the local worker
           const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
