@@ -36,15 +36,14 @@
       </form>
     </div>
 
-    <script>
-      // This wrapper forces JS to wait until the HTML is fully loaded
+ <script>
+      // Force JS to wait until the HTML is fully loaded to prevent 'null' errors
       window.addEventListener('load', async () => {
           
           // --- 1. Menu Button Logic ---
           const optionsBtn = document.getElementById("options-btn");
           const overlay = document.getElementById("menu-overlay");
           
-          // The "if" statement ensures it doesn't crash if it can't find the button
           if (optionsBtn && overlay) {
               optionsBtn.addEventListener("click", () => {
                   overlay.classList.toggle("active");
@@ -60,34 +59,35 @@
                   event.preventDefault(); 
                   let url = input.value.trim();
                   if (!url) return;
+                  
                   if (!url.includes('.') || url.includes(' ')) {
                       url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
                   } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
                       url = 'https://' + url;
                   }
+                  
+                  // Passes the URL to Ultraviolet
                   window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
               });
           }
 
-          // --- 3. The Proxy Engine Boot Sequence ---
-          try {
-              // Connect to the local worker
-              const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
-              
-              // Use your LOCAL browser-safe bare.js file
-              await connection.setTransport("/prxy/baremux/bare.js", [__uv$config.bare]);
-              console.log("BareMux transport connected locally!");
+          // --- 3. The Proxy Engine Boot Sequence (Unmasked) ---
+          // No try/catch wrapper here so the exact error line will bubble up to the console!
+          
+          // Connect to the local worker
+          const connection = new BareMux.BareMuxConnection("/prxy/baremux/worker.js");
+          
+          // Use your LOCAL browser-safe bare.js file (containing the ESM module)
+          await connection.setTransport("/prxy/baremux/bare.js", [__uv$config.bare]);
+          console.log("BareMux transport connected locally!");
 
-              // ONLY register the Service Worker if transport succeeds
-              if ('serviceWorker' in navigator) {
-                  await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-                  console.log("Service Worker installed.");
-                  
-                  await navigator.serviceWorker.ready;
-                  console.log("Engine Online and Ready!");
-              }
-          } catch (err) {
-              console.error("Critical Engine Failure:", err);
+          // Register the Service Worker
+          if ('serviceWorker' in navigator) {
+              await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+              console.log("Service Worker installed.");
+              
+              await navigator.serviceWorker.ready;
+              console.log("Engine Online and Ready!");
           }
       });
     </script>
