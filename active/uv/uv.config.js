@@ -1,6 +1,6 @@
 self.__uv$config = {
   prefix: "/uv/service/",
-bare: 'https://mybareserv.onrender.com/bare/',
+bare: 'https://bare2-la3u.onrender.com/',
   encodeUrl: Ultraviolet.codec.xor.encode,
   decodeUrl: Ultraviolet.codec.xor.decode,
   handler: "/uv/uv.handler.js",
